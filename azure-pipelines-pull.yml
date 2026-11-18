@@ -22,7 +22,7 @@ steps:
 - script: |
     echo "$(JFROG_TOKEN)" | docker login $(JFROG_URL) -u $(JFROG_USER) --password-stdin
     docker pull $(JFROG_URL)/docker-trial/$(appName):20
-    docker run -d -p 8000:8000 --name qa $(JFROG_URL)/docker-trial/$(appName):TAG_HERE
+    docker run -d -p 8000:8000 --name qa $(JFROG_URL)/docker-trial/$(appName):20
     sleep 8
     curl http://localhost:8000/quote
   displayName: PULL image and run it
