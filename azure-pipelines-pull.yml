@@ -20,7 +20,9 @@ steps:
   displayName: PULL wheel with jf
 
 - script: |
-    jf docker pull $(JFROG_URL)/docker-trial/$(appName):latest docker-trial || \
-    jf docker pull $(JFROG_URL)/docker-trial/$(appName):$(Build.BuildId) docker-trial
-    docker images | grep $(appName)
-  displayName: PULL image with jf
+    echo "$(JFROG_TOKEN)" | docker login $(JFROG_URL) -u $(JFROG_USER) --password-stdin
+    docker pull $(JFROG_URL)/docker-trial/$(appName):20
+    docker run -d -p 8000:8000 --name qa $(JFROG_URL)/docker-trial/$(appName):TAG_HERE
+    sleep 8
+    curl http://localhost:8000/quote
+  displayName: PULL image and run it
