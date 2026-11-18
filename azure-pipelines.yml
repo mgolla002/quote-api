@@ -52,9 +52,8 @@ stages:
 
     - script: |
         docker build -t $(JFROG_URL)/docker-trial/$(appName):$(Build.BuildId) .
-        jf docker push $(JFROG_URL)/docker-trial/$(appName):$(Build.BuildId) docker-trial \
-          --build-name=$(appName) --build-number=$(Build.BuildId)
-      displayName: PUSH image with jf
+        docker push $(JFROG_URL)/docker-trial/$(appName):$(Build.BuildId)
+      displayName: PUSH image
 
     - script: |
         jf rt build-collect-env $(appName) $(Build.BuildId)
