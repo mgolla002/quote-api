@@ -51,6 +51,7 @@ stages:
       displayName: PUSH wheel with jf
 
     - script: |
+        echo "$(JFROG_TOKEN)" | docker login $(JFROG_URL) -u $(JFROG_USER) --password-stdin
         docker build -t $(JFROG_URL)/docker-trial/$(appName):$(Build.BuildId) .
         docker push $(JFROG_URL)/docker-trial/$(appName):$(Build.BuildId)
       displayName: PUSH image
