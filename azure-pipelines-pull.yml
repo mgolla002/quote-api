@@ -1,0 +1,26 @@
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: jfrog-vars
+  - name: appName
+    value: quote-api
+
+steps:
+- script: |
+    curl -fL https://install-cli.jfrog.io | sh
+    jf config add trial --url=https://$(JFROG_URL) --user=$(JFROG_USER) --access-token=$(JFROG_TOKEN) --interactive=false
+  displayName: Install and configure JFrog CLI
+
+- script: |
+    jf rt download "pypl-local/$(appName)/*.whl" downloaded/ --flat=true
+    ls -l downloaded/
+  displayName: PULL wheel with jf
+
+- script: |
+    jf docker pull $(JFROG_URL)/docker-trial/$(appName):latest docker-trial || \
+    jf docker pull $(JFROG_URL)/docker-trial/$(appName):$(Build.BuildId) docker-trial
+    docker images | grep $(appName)
+  displayName: PULL image with jf
